@@ -1,5 +1,6 @@
 package com.acme;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,8 +12,36 @@ public class PinguinSay {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PinguinSay.class);
 
+    public static void asyncPrint(List<String> texts, Duration sleepDuration) {
+        Thread thread = new Thread(() -> {
+            for (String text : texts) {
+                try {
+                    Thread.sleep(sleepDuration.toMillis());
+                    print(text);
+                } catch (InterruptedException e) {
+                    return;
+                }
+            }
+        });
+        thread.start();
+    }
+
     public static void print(String text) {
         createTextLines(text).forEach(System.out::println);
+    }
+
+    public static void asyncLog(List<String> texts, Duration sleepDuration) {
+        Thread thread = new Thread(() -> {
+            for (String text : texts) {
+                try {
+                    Thread.sleep(sleepDuration.toMillis());
+                    log(text);
+                } catch (InterruptedException e) {
+                    return;
+                }
+            }
+        });
+        thread.start();
     }
 
     public static void log(String text) {
